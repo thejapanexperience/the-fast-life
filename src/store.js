@@ -3,16 +3,16 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
 
-import reducer from './reducers';
+import rootReducer from './reducers/index';
 
-let middleware = [
+const middleware = [
   thunkMiddleware,
   promiseMiddleware(),
   // ...
 ];
 
-const store = createStore(reducer, composeWithDevTools(
-  applyMiddleware(...middleware)
+const store = createStore(rootReducer, composeWithDevTools(
+  applyMiddleware(...middleware),
 ));
 
 export default store;

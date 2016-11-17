@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Navbar from './Navbar';
 
 export default class Layout extends Component {
   render() {
     return (
-      <div className='container'>
-        <h1 className='text-center'>Redux Express</h1>
+      <div>
+        <Navbar />
+        <div>
+          {this.props.children}
+        </div>
       </div>
-    )
+    );
   }
 }
