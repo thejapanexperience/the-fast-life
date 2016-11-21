@@ -4,7 +4,6 @@ import { Link, browserHistory } from 'react-router';
 
 import axios from 'axios';
 import moment from 'moment';
-import uuid from 'uuid';
 
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -59,12 +58,6 @@ export default class MyFasts extends Component {
     this.state = {};
   }
 
-  componentWillMount() {
-    if (!this.props.user._id) {
-      console.log('no user._id / this.props.user: ', this.props.user);
-    }
-  }
-
   render() {
     let { user } = this.props;
     const { _getFasts, _setCurrentFast } = this.props;
@@ -77,19 +70,19 @@ export default class MyFasts extends Component {
     if (userData) {
       user = userData;
     }
-    console.log('user: ', user);
 
     if (!user) {
       browserHistory.push('/');
     }
 
     let usersFasts = [];
+    const inProgress = [];
+    const completedStopped = [];
+    const notYetStarted = [];
 
     if (user.fasts) {
       usersFasts = user.fasts;
     }
-
-    console.log('usersFasts1: ', usersFasts);
 
     usersFasts.forEach((fast) => {
       const now = new Date();
@@ -97,7 +90,6 @@ export default class MyFasts extends Component {
       const b = moment(now);
       const difference = b.diff(a, 'hours');
       const linearProgress = fast.linearProgress || Math.round(difference / fast.duration * 100);
-      console.log('linearProgress: ', linearProgress);
 
       if (!fast.linearProgress && linearProgress > 100) {
         fast.status = 'Completed';
@@ -111,7 +103,6 @@ export default class MyFasts extends Component {
       if (fast.linearProgress) {
         fast.status = 'Stopped';
       }
-      console.log('fast.status: ', fast.status);
     });
 
     usersFasts.sort((a, b) => {
@@ -122,30 +113,17 @@ export default class MyFasts extends Component {
 
     usersFasts.forEach((fast, i) => {
       if (fast.status === 'In progress') {
-        let temp = [];
-        temp.push(fast);
-        usersFasts.splice(i, 1);
-        usersFasts.unshift(temp[0]);
-        temp = [];
+        inProgress.push(fast);
       }
-      if (fast.status === 'Completed') {
-        let temp = [];
-        temp.push(fast);
-        usersFasts.splice(i, 1);
-        usersFasts.push(temp[0]);
-        temp = [];
+      if (fast.status === 'Completed' || fast.status === 'Stopped') {
+        completedStopped.push(fast);
+      }
+      if (fast.status === 'Not yet started') {
+        notYetStarted.push(fast);
       }
     });
 
-    usersFasts.forEach((fast, i) => {
-      if (fast.status === 'Stopped') {
-        let temp = [];
-        temp.push(fast);
-        usersFasts.splice(i, 1);
-        usersFasts.push(temp[0]);
-        temp = [];
-      }
-    });
+    usersFasts = [...inProgress, ...completedStopped, ...notYetStarted];
 
     const stats = {
       length: 0,
@@ -168,12 +146,13 @@ export default class MyFasts extends Component {
     });
 
     stats.aveLength = Math.round(stats.length / stats.totalAttempted * 10) / 10;
+    if (!stats.aveLength) {
+      stats.aveLength = 0;
+    }
     stats.successRate = Math.round(stats.totalCompleted / stats.totalAttempted * 100);
-
-    console.log('stats: ', stats);
-
-    console.log('user: ', user);
-    console.log('usersFasts2: ', usersFasts);
+    if (!stats.successRate) {
+      stats.successRate = 0;
+    }
 
     return (
       <div>
@@ -204,31 +183,22 @@ export default class MyFasts extends Component {
             let linearProgress = fast.linearProgress || Math.round(difference / fast.duration * 100);
             if (!fast.linearProgress && linearProgress > 100) {
               fast.status = 'Completed';
-              console.log('linearProgress, fast.status: ', linearProgress, fast.status);
             }
             if (!fast.linearProgress && linearProgress < 0) {
               fast.status = 'Not yet started';
-              console.log('linearProgress, fast.status: ', linearProgress, fast.status);
             }
             if (!fast.linearProgress && linearProgress > -1 && linearProgress < 100) {
               fast.status = 'In progress';
-              console.log('linearProgress, fast.status: ', linearProgress, fast.status);
             }
             if (fast.linearProgress) {
               linearProgress = fast.linearProgress;
               fast.status = 'Stopped';
-              console.log('linearProgress, fast.status: ', linearProgress, fast.status);
             }
             return (
               <div className="col-sm-4" key={fast._id}>
                 <Card style={{ margin: '10px' }}>
                   <Paper style={{ padding: '10px' }}>
 
-                    {/* <CardHeader
-                      subtitle=""
-                      title=""
-                      style={{ height: '15px' }}
-                    /> */}
                     <CardMedia
                       overlay={<CardTitle title={`${fast.duration} Hour Fast`} subtitle={moment(fast.startDate).format('ddd, MMM Do, h:mm a')} />}
                     >

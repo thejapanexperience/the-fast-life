@@ -7,12 +7,9 @@ const Fast = require('../models/Fast');
 router.route('/')
 
   .post((req, res) => {
-    console.log('creating new fast');
-    console.log('req.body: ', req.body);
     Fast.create(req.body)
   .then(fast => User.findByIdAndUpdate(fast.user[0], { $push: { fasts: fast } }, { new: true }).populate('fasts'))
   .then((updatedUser) => {
-    console.log('updatedUser: ', updatedUser);
     res.send(updatedUser);
   })
   .catch(err => res.status(400).send(err));

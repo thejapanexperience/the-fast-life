@@ -50,8 +50,6 @@ import * as MyFastsActions from '../actions/MyFastsActions';
        dispatch(DetailsActions.comment1(value));
      },
      _comment2(comment, comments, id, currentFast) {
-       console.log('comment: ', comment);
-       console.log('id: ', id);
        const date = new Date();
        const newComment = { comment, date, editable: false };
        const newComments = [...comments, newComment];
@@ -66,8 +64,6 @@ import * as MyFastsActions from '../actions/MyFastsActions';
      },
      _updateDate(e, value) {
        const { currentFast } = this.props;
-       console.log('value: ', value);
-       console.log('currentFast.startDate: ', currentFast.startDate);
        const updatedFast = currentFast;
        const startDateNew = new Date(updatedFast.startDate);
        const startDateOld = new Date(updatedFast.startDate);
@@ -96,7 +92,6 @@ import * as MyFastsActions from '../actions/MyFastsActions';
 
        axios.put('/api/fasts', { updatedFast })
        .then((res) => {
-         console.log('res: ', res);
          dispatch(NewFastActions.updateUser(res.data));
          dispatch(MyFastsActions.setCurrentFast(updatedFast));
        });
@@ -126,14 +121,12 @@ import * as MyFastsActions from '../actions/MyFastsActions';
 
        axios.put('/api/fasts', { updatedFast })
        .then((res) => {
-         console.log('res: ', res);
          dispatch(NewFastActions.updateUser(res.data));
          dispatch(MyFastsActions.setCurrentFast(updatedFast));
        });
      },
      _updateDuration(e, value) {
        const { currentFast } = this.props;
-       console.log('value: ', value);
        const updatedFast = currentFast;
        const endDateNew = new Date(updatedFast.startDate);
        endDateNew.setHours(endDateNew.getHours() + parseInt(value));
@@ -142,7 +135,6 @@ import * as MyFastsActions from '../actions/MyFastsActions';
 
        axios.put('/api/fasts', { updatedFast })
        .then((res) => {
-         console.log('res: ', res);
          dispatch(NewFastActions.updateUser(res.data));
          dispatch(MyFastsActions.setCurrentFast(updatedFast));
        });
@@ -151,18 +143,13 @@ import * as MyFastsActions from '../actions/MyFastsActions';
        dispatch(NewFastActions.hungerStrategies2(value));
      },
      _addStrategy2(strategy) {
-       console.log('adding strategy');
        const { currentFast } = this.props;
        const updatedFast = currentFast;
        const strategies = updatedFast.strategies;
-       console.log('strategies: ', strategies);
-       console.log('strategy: ', strategy);
        updatedFast.strategies = [...strategies, strategy];
-       console.log('updatedFast: ', updatedFast);
 
        axios.put('/api/fasts', { updatedFast })
        .then((res) => {
-         console.log('res: ', res);
          dispatch(NewFastActions.updateUser(res.data));
          dispatch(MyFastsActions.setCurrentFast(updatedFast));
        });
@@ -177,7 +164,6 @@ import * as MyFastsActions from '../actions/MyFastsActions';
 
        axios.put('/api/fasts', { updatedFast })
        .then((res) => {
-         console.log('res: ', res);
          dispatch(NewFastActions.updateUser(res.data));
          dispatch(MyFastsActions.setCurrentFast(updatedFast));
        });
@@ -185,7 +171,6 @@ import * as MyFastsActions from '../actions/MyFastsActions';
      _deleteComment(comment) {
        const { currentFast } = this.props;
        const updatedFast = currentFast;
-       console.log('comment: ', comment);
 
        const newComments = updatedFast.comments.filter(obj =>
           obj.comment !== comment.comment,
@@ -224,8 +209,6 @@ import * as MyFastsActions from '../actions/MyFastsActions';
        const text = this.refs.editedDiaryEntry.getValue();
        const updatedFast = currentFast;
 
-       console.log('text: ', text);
-
        updatedFast.comments.forEach((obj) => {
          if (obj.date === comment.date) {
            obj.comment = text;
@@ -235,13 +218,11 @@ import * as MyFastsActions from '../actions/MyFastsActions';
 
        axios.put('/api/fasts', { updatedFast })
        .then((res) => {
-         console.log('res: ', res);
          dispatch(NewFastActions.updateUser(res.data));
          dispatch(MyFastsActions.setCurrentFast(updatedFast));
        });
      },
      _stopFast(linearProgress) {
-       console.log('linearProgress: ', linearProgress);
        const { currentFast } = this.props;
        const updatedFast = currentFast;
 
@@ -250,7 +231,6 @@ import * as MyFastsActions from '../actions/MyFastsActions';
 
        axios.put('/api/fasts', { updatedFast })
        .then((res) => {
-         console.log('res: ', res);
          dispatch(NewFastActions.updateUser(res.data));
          dispatch(MyFastsActions.setCurrentFast(updatedFast));
        });
@@ -259,7 +239,6 @@ import * as MyFastsActions from '../actions/MyFastsActions';
        const { currentFast } = this.props;
        axios.delete(`/api/fasts/${currentFast._id}`)
        .then((res) => {
-         console.log('res: ', res);
          dispatch(NewFastActions.updateUser(res.data));
        });
      },
@@ -301,8 +280,6 @@ export default class MyFasts extends Component {
       browserHistory.push('/myfasts');
     }
 
-    console.log('comment1: ', comment1);
-
     const fast = currentFast;
     const now = new Date();
     const a = moment(fast.startDate);
@@ -315,9 +292,6 @@ export default class MyFasts extends Component {
     if (linearProgress < 0) {
       linearProgress = 1;
     }
-
-    console.log('currentFast: ', currentFast);
-    console.log('user: ', user);
 
     let theRender;
     fast.strategies ? theRender = (<div>

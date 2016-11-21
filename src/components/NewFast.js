@@ -149,8 +149,6 @@ export default class NewFast extends Component {
     _hungerStrategies3 = _hungerStrategies3.bind(this);
     _saveFast = _saveFast.bind(this);
 
-    console.log('user: ', user);
-
     let userData = null;
     if (!user._id && user.data) {
       userData = user.data;
@@ -159,7 +157,6 @@ export default class NewFast extends Component {
     if (userData) {
       user = userData;
     }
-    console.log('user: ', user);
 
     if (!user) {
       browserHistory.push('/');
@@ -247,9 +244,6 @@ export default class NewFast extends Component {
               : null}
 
               {ownStrategy ? <RaisedButton fullWidth style={{ textAlign: 'center' }} label="Add Strategy" onClick={() => _hungerStrategies3(ownStrategy)} /> : null }
-              {/* {linearProgress === 100 ? <CardText></CardText> : null} */}
-              {linearProgress === 100 ? <Link to={'/myfasts'}><RaisedButton fullWidth style={{ textAlign: 'center' }} label="Save Fast" secondary onClick={() => _saveFast()} /></Link> : null}
-              {linearProgress > 1 ? <RaisedButton fullWidth style={{ textAlign: 'center' }} label="Discard" primary onClick={() => _reset()} /> : null}
 
             </Card>
           </Paper>
@@ -304,6 +298,8 @@ export default class NewFast extends Component {
                   ))}
                 </div>
               </CardText>
+              {linearProgress === 100 ? <Link to={'/myfasts'}><RaisedButton fullWidth style={{ textAlign: 'center' }} label="Save Fast" secondary onClick={() => _saveFast()} /></Link> : null}
+              {linearProgress > 1 ? <RaisedButton fullWidth style={{ textAlign: 'center' }} label="Discard" primary onClick={() => _reset()} /> : null}
             </Card>
           </Paper>
         </div>
