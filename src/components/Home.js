@@ -38,7 +38,6 @@ export default class Home extends Component {
 
   render() {
     let { loggedIn, user } = this.props;
-    console.log('user: ', user);
 
     let userData = null;
     if (!user._id && user.data) {
@@ -48,7 +47,6 @@ export default class Home extends Component {
     if (userData) {
       user = userData;
     }
-    console.log('user: ', user);
 
     if (!user) {
       this._signOut();
