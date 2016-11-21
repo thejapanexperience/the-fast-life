@@ -312,14 +312,14 @@ export default class MyFasts extends Component {
 
           <Paper style={{ width: 'auto', padding: '10px', margin: '10px' }} zDepth={1} ><LinearProgress style={{ height: '80px' }} mode="determinate" value={linearProgress} /></Paper>
           <CardTitle style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '5px', paddingBottom: '1px' }}title={fast.status} />
-          {currentFast.status === 'stopped' ? <CardText style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '1px', paddingBottom: '10px' }}>You have stopped this fast. You completed {linearProgress}% of this fast</CardText> : <CardText style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '1px', paddingBottom: '10px' }}>You have completed {linearProgress}% of this fast</CardText>}
+          {currentFast.status === 'Stopped' || currentFast.status === 'Completed' ? <CardText style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '1px', paddingBottom: '10px' }}>You have stopped this fast. You completed {linearProgress}% of this fast</CardText> : <CardText style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '1px', paddingBottom: '10px' }}>You have completed {linearProgress}% of this fast</CardText>}
 
 
           <Divider />
           <CardText style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '21px', paddingBottom: '1px' }}>Start Time</CardText>
           <CardTitle style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '1px', paddingBottom: '0px' }} title={moment(fast.startDate).format('dddd, MMMM Do YYYY, h:mm a')} />
-          {currentFast.status === 'stopped' ? null : <CardText style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '0px', paddingBottom: '1px' }}><DatePicker fullWidth hintText="Adjust Date" onChange={_updateDate} /></CardText>}
-          {currentFast.status === 'stopped' ? null : <CardText style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '0px' }}><TimePicker fullWidth hintText="Adjust Time" onChange={_updateTime} /></CardText>}
+          {currentFast.status === 'Stopped' || currentFast.status === 'Completed' ? null : <CardText style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '0px', paddingBottom: '1px' }}><DatePicker fullWidth hintText="Adjust Date" onChange={_updateDate} /></CardText>}
+          {currentFast.status === 'Stopped' || currentFast.status === 'Completed' ? null : <CardText style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '0px' }}><TimePicker fullWidth hintText="Adjust Time" onChange={_updateTime} /></CardText>}
 
 
           <Divider />
@@ -328,7 +328,7 @@ export default class MyFasts extends Component {
           <Divider />
           <CardText style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '10px', paddingBottom: '1px', marginTop: '0px' }}>Duration</CardText>
           <CardTitle style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '1px', paddingBottom: '0px', marginTop: '0px', marginBottom: '0px' }} title={`${fast.duration} Hours`} />
-          {currentFast.status === 'stopped' ? null :
+          {currentFast.status === 'Stopped' || currentFast.status === 'Completed' ? null :
           <CardText style={{ paddingTop: '0px', marginTop: '0px' }}>
             <TextField
               style={{ paddingTop: '0px', marginTop: '0px', paddingBottom: '0px' }}
@@ -347,7 +347,7 @@ export default class MyFasts extends Component {
           <Divider />
           <CardText style={{ paddingLeft: '16px', paddingRight: '16px', paddingBottom: '1px' }}>Hunger Strategies</CardText>
 
-          {currentFast.status === 'stopped' ?
+          {currentFast.status === 'Stopped' || currentFast.status === 'Completed' ?
             <div
               style={{
                 display: 'flex',
@@ -386,14 +386,15 @@ export default class MyFasts extends Component {
           <CardText
             style={{ paddingTop: '0', marginTop: '0', marginRight: '5px' }}
           >
-            {currentFast.status === 'stopped' ? null : <TextField
+            {currentFast.status === 'Stopped' || currentFast.status === 'Completed' ? null :
+            <TextField
               id="addStrategy"
               floatingLabelText="Add another strategy"
               type="Text"
               onChange={_addStrategy1}
             />}
 
-            {currentFast.status === 'stopped' ? null : <FlatButton label="Add Strategy" secondary onClick={() => _addStrategy2(ownStrategy)} />}
+            {currentFast.status === 'Stopped' || currentFast.status === 'Completed' ? null : <FlatButton label="Add Strategy" secondary onClick={() => _addStrategy2(ownStrategy)} />}
 
 
           </CardText>
@@ -443,7 +444,7 @@ export default class MyFasts extends Component {
           <Divider />
           <CardActions>
             <Link to={'/myfasts'}><RaisedButton fullWidth label="Save Changes" /></Link>
-            {currentFast.status === 'stopped' ? null : <Link to={'/myfasts'}><RaisedButton secondary fullWidth label="Stop Fast" onClick={() => _stopFast(linearProgress)} /></Link>}
+            {currentFast.status === 'Stopped' || currentFast.status === 'Completed' || currentFast.status === 'Not yet started' ? null : <Link to={'/myfasts'}><RaisedButton secondary fullWidth label="Stop Fast" onClick={() => _stopFast(linearProgress)} /></Link>}
             <Link to={'/myfasts'}><RaisedButton fullWidth primary label="Delete Fast" onClick={_deleteFast} /></Link>
           </CardActions>
         </Card>

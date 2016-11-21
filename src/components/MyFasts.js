@@ -180,20 +180,8 @@ export default class MyFasts extends Component {
             const a = moment(fast.startDate);
             const b = moment(now);
             const difference = b.diff(a, 'hours');
-            let linearProgress = fast.linearProgress || Math.round(difference / fast.duration * 100);
-            if (!fast.linearProgress && linearProgress > 100) {
-              fast.status = 'Completed';
-            }
-            if (!fast.linearProgress && linearProgress < 0) {
-              fast.status = 'Not yet started';
-            }
-            if (!fast.linearProgress && linearProgress > -1 && linearProgress < 100) {
-              fast.status = 'In progress';
-            }
-            if (fast.linearProgress) {
-              linearProgress = fast.linearProgress;
-              fast.status = 'Stopped';
-            }
+            const linearProgress = fast.linearProgress || Math.round(difference / fast.duration * 100);
+
             return (
               <div className="col-sm-4" key={fast._id}>
                 <Card style={{ margin: '10px' }}>
