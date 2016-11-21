@@ -262,11 +262,7 @@ export default class NewFast extends Component {
 
               }}
             >
-              <CardHeader
-                title={user.displayName}
-                subtitle={user.email}
-                avatar={user.photoURL}
-              />
+
               <div>
                 <CardText style={{ color: '#ff4081', fontSize: '2em', textAlign: 'left' }} >YOUR FAST</CardText>
                 <LinearProgress style={{ height: '80px' }} mode="determinate" value={linearProgress} />
@@ -274,10 +270,10 @@ export default class NewFast extends Component {
               <br />
               <CardText style={{ textAlign: 'left', color: '#ff4081' }}>
                 {startDate ? 'Start : ' : ''}
-                {startDate ? `${moment(startDate).format('dddd, MMMM Do YYYY, h:mm a')}` : ''}
+                {startDate ? `${moment(startDate).format('ddd, MMM Do YYYY, k:mm')}` : ''}
                 {startDate ? <hr /> : null}
                 {endDate ? 'End : ' : ''}
-                {endDate ? `${moment(endDate).format('dddd, MMMM Do YYYY, h:mm a')}` : ''}
+                {endDate ? `${moment(endDate).format('ddd, MMM Do YYYY, k:mm')}` : ''}
                 {endDate ? <hr /> : null}
                 {duration ? 'Duration : ' : ''}
                 {duration ? `${duration} hours` : ''}
@@ -290,7 +286,7 @@ export default class NewFast extends Component {
                     (
                       <Chip
                         key={strategy}
-                        style={{ marginRight: '4px' }}
+                        style={{ marginRight: '4px', marginTop: '4px' }}
                         onRequestDelete={() => handleRequestDelete(strategy, strategies)}
                       >
                         {strategy}
