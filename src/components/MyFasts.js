@@ -222,21 +222,24 @@ export default class MyFasts extends Component {
             return (
               <div className="col-sm-4" key={fast._id}>
                 <Card style={{ margin: '10px' }}>
-                  <CardHeader
-                    subtitle=""
-                    title=""
-                    style={{ height: '40px' }}
-                  />
-                  <CardMedia
-                    overlay={<CardTitle title={`${fast.duration} Hour Fast`} subtitle={moment(fast.startDate).format('ddd, MMM Do, h:mm a')} />}
-                  >
-                    <img src="Fasting2.jpg" />
-                  </CardMedia>
-                  <CardTitle subtitle={fast.status} style={{ textAlign: 'center', marginTop: '5px', paddingTop: '5px', marginBottom: '0', paddingBottom: '0' }} />
-                  <Paper style={{ width: 'auto', padding: '10px', margin: '10px', marginTop: '2px' }} zDepth={1} ><LinearProgress style={{ height: '20px' }} mode="determinate" value={linearProgress} /></Paper>
-                  <CardActions>
-                    <Link to={'/fastdetail'}><RaisedButton fullWidth secondary label="View Fast" onClick={() => _setCurrentFast(fast)} /></Link>
-                  </CardActions>
+                  <Paper style={{ padding: '10px' }}>
+
+                    {/* <CardHeader
+                      subtitle=""
+                      title=""
+                      style={{ height: '15px' }}
+                    /> */}
+                    <CardMedia
+                      overlay={<CardTitle title={`${fast.duration} Hour Fast`} subtitle={moment(fast.startDate).format('ddd, MMM Do, h:mm a')} />}
+                    >
+                      <img src="Fasting2.jpg" />
+                    </CardMedia>
+                    <CardTitle subtitle={fast.status} style={{ textAlign: 'center', marginTop: '5px', paddingTop: '5px', marginBottom: '0', paddingBottom: '0' }} />
+                    <Paper style={{ width: 'auto', padding: '10px', margin: '10px', marginTop: '2px' }} zDepth={1} ><LinearProgress style={{ height: '20px' }} mode="determinate" value={linearProgress} /></Paper>
+                    <CardActions>
+                      <Link to={'/fastdetail'}><RaisedButton fullWidth label="View Fast" onClick={() => _setCurrentFast(fast)} /></Link>
+                    </CardActions>
+                  </Paper>
                 </Card>
               </div>
             );
@@ -260,7 +263,10 @@ export default class MyFasts extends Component {
               </CardActions>
             </Card>
           </div>
-          }
+        }
+
+
+        <br />
         <br />
         <br />
 
