@@ -38,7 +38,7 @@ export default class Navbar extends Component {
 
       <div className="text-center">
 
-        {authenticated ? <Link to={'/'}><FlatButton label="The Fast Life" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/'}><FlatButton label="The Fast Life" secondary style={{ width: '25%', padding: '2px' }} /></Link>}
+        {authenticated ? <Link to={'/'}><FlatButton label="Fast Life" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/'}><FlatButton label="The Fast Life" secondary style={{ width: '25%', padding: '2px' }} /></Link>}
         {authenticated ? <Link to={'/myfasts'}><FlatButton label="My Fasts" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/'}><FlatButton disabled label=" " secondary style={{ width: '25%', padding: '2px' }} /></Link>}
         {authenticated ? <Link to={'/newfast'}><FlatButton label="New Fast" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/'}><FlatButton disabled label=" " secondary style={{ width: '25%', padding: '2px' }} /></Link> }
         {authenticated ? <Link to={'/'}><FlatButton label="Logout" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/'}><FlatButton label="Login" secondary style={{ width: '25%', padding: '2px' }} /></Link>}

@@ -1,10 +1,11 @@
+import axios from 'axios';
 import firebase from 'firebase';
 import { firebaseAuth } from '../firebase';
 
-function signInSuccess(result) {
+function signInSuccess(user) {
   return {
     type: 'SIGN_IN_SUCCESS',
-    payload: result.user,
+    payload: { user },
   };
 }
 
@@ -45,7 +46,20 @@ function signOutError(err) {
 function authenticate(provider) {
   return (dispatch) => {
     firebaseAuth.signInWithPopup(provider)
-    .then(result => dispatch(signInSuccess(result)))
+    .then(result =>
+       axios.post('/api/users/usercheck', { result }),
+    )
+    .then((check) => {
+      const user = check.data.result.user;
+      if (!check.data.user) {
+        return axios.post('api/users', { user });
+      }
+      const existingUser = check.data.user;
+      return existingUser;
+    })
+    .then((user) => {
+      dispatch(signInSuccess(user));
+    })
     .catch(err => dispatch(signInError(err)));
   };
 }
@@ -68,7 +82,11 @@ export function initAuth(dispatch) {
     const unsub = firebaseAuth.onAuthStateChanged(
       (user) => {
         if (user) {
-          dispatch(initAuthSuccess(user));
+          const email = user.email;
+          axios.post('/api/users/getuserfromdb', { email })
+          .then((user) => {
+            dispatch(initAuthSuccess(user));
+          });
         }
         unsub();
         res();

@@ -1,3 +1,12 @@
+import axios from 'axios';
+
+export function updateUser(updatedUser) {
+  return {
+    type: 'UPDATE_USER_NEW_FAST',
+    payload: { updatedUser },
+  };
+}
+
 export function hungerStrategies(strategy, strategies) {
   return {
     type: 'UPDATE_STRATEGY_STRATEGIES',
@@ -40,12 +49,13 @@ export function duration(lastDuration, endDate) {
     payload: { lastDuration, endDate },
   };
 }
-export function saveFast(fast) {
+export function saveFast(data) {
   return {
-    type: 'SAVE',
-    payload: { fast },
+    type: 'UPDATE_USERS_FASTS',
+    payload: data,
   };
 }
+
 export function reset() {
   return {
     type: 'RESET',

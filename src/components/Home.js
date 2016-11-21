@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { signInWithGoogle, signOut } from '../actions/auth';
+import { signInWithGoogle, signOut, getUserFromDB } from '../actions/auth';
 
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -27,6 +27,7 @@ export default class Home extends Component {
     this._googleSignIn = this._googleSignIn.bind(this);
     this._signOut = this._signOut.bind(this);
   }
+
   _googleSignIn() {
     this.props.googleSignIn();
   }
@@ -36,19 +37,37 @@ export default class Home extends Component {
   }
 
   render() {
-    const { loggedIn, user } = this.props;
-    console.log('loggedIn: ', loggedIn);
+    let { loggedIn, user } = this.props;
+    console.log('user: ', user);
+
+    let userData = null;
+    if (!user._id && user.data) {
+      userData = user.data;
+    }
+
+    if (userData) {
+      user = userData;
+    }
+    console.log('user: ', user);
+
+    if (!user) {
+      this._signOut();
+    }
+
     return (
       <div>
         <Row>
           <Card style={{ width: '100%', padding: '5px' }}>
-            {/* <CardHeader
-              title="URL Avatar"
-              subtitle="Subtitle"
-              avatar="Fasting.jpg"
-            /> */}
+            { loggedIn ? <CardHeader
+              title={user.displayName}
+              subtitle={user.email}
+              avatar={user.photoURL}
+            /> : <CardHeader
+              title="Welcome to the Fast Life..."
+              subtitle="Click Below To Sign In"
+            />}
             <CardMedia
-              overlay={<CardTitle title="Fast Life" subtitle="Plan your fasts for greater success" />}
+              overlay={<CardTitle title="The Fast Life" subtitle="Plan your fasts for greater success" />}
             >
               <img src="Fasting.jpg" />
             </CardMedia>
@@ -56,13 +75,6 @@ export default class Home extends Component {
               <RaisedButton onClick={this._signOut} primary style={{ width: '100%', paddingTop: '5px' }} label="Sign Out" /> :
               <RaisedButton onClick={this._googleSignIn} secondary style={{ width: '100%', paddingTop: '5px' }} label="Google Sign In" />
             }
-            {/* <CardTitle title="Card title" subtitle="Card subtitle" />
-              <CardText>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-              Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-              Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-            </CardText> */}
           </Card>
         </Row>
       </div>

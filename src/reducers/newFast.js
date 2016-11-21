@@ -12,14 +12,7 @@ const initialState = {
   showTime: true,
   showDuration: true,
   linearProgress: 1,
-  savedFasts: [{
-    strategies: ['Drink Water', 'Yoga'],
-    startDate: 'Tue Nov 15 2016 22:01:00 GMT-0800 (PST)',
-    endDate: 'Thu Nov 17 2016 10:01:00 GMT-0800 (PST)',
-    duration: 36,
-    status: 'In Progress',
-    id: '123456789',
-  }],
+  savedFasts: [],
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -41,7 +34,7 @@ export default function (state = initialState, action) {
       const { ownStrategy } = action.payload;
       return Object.assign({}, state, {
         ownStrategy,
-        strategy: ownStrategy,
+        // strategy: ownStrategy,
       });
     case 'START_DATE':
       const startDate = action.payload;
@@ -68,11 +61,12 @@ export default function (state = initialState, action) {
         duration: lastDuration, endDate, showDuration: false,
         linearProgress: 75,
       });
-    case 'SAVE':
-      const { fast } = action.payload;
-      const newSaved = [...savedFasts, fast];
+    case 'UPDATE_USERS_FASTS':
+      const data = action.payload;
+      console.log('action.payload: ', action.payload);
+      console.log('data: ', data);
       return Object.assign({}, state, {
-        savedFasts: newSaved,
+        savedFasts: data,
       });
     case 'RESET':
       return Object.assign({}, state, {

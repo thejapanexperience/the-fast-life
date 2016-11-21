@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 
 import moment from 'moment';
 import uuid from 'uuid';
+import axios from 'axios';
 
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -20,7 +21,7 @@ import FontIcon from 'material-ui/FontIcon';
 import SvgIconFace from 'material-ui/svg-icons/action/face';
 import { blue300, indigo900 } from 'material-ui/styles/colors';
 import Badge from 'material-ui/Badge';
-
+import Paper from 'material-ui/Paper';
 
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
@@ -31,6 +32,8 @@ injectTapEventPlugin();
 
 @connect(state =>
    ({
+     loggedIn: state.auth.authenticated,
+     user: state.auth.user,
      strategy: state.newFast.strategy,
      startDate: state.newFast.startDate,
      endDate: state.newFast.endDate,
@@ -68,8 +71,8 @@ injectTapEventPlugin();
        const { startDate } = this.props;
        const hours = time.getHours();
        const minutes = time.getMinutes();
-       startDate.setHours(startDate.getHours() + hours);
-       startDate.setMinutes(startDate.getMinutes() + minutes);
+       startDate.setHours(hours);
+       startDate.setMinutes(minutes);
        dispatch(NewFastActions.startTime(time, startDate));
      },
      _duration(event, finalDuration) {
@@ -89,14 +92,26 @@ injectTapEventPlugin();
        dispatch(NewFastActions.hungerStrategies3(toReturn));
      },
      _saveFast() {
+       let id;
+       if (this.props.user._id) {
+         id = this.props.user._id;
+       } else if (this.props.user.data._id) {
+         id = this.props.user.data._id;
+       }
        const fast = {
-         strategies: this.props.strategies,
-         startDate: this.props.startDate,
-         endDate: this.props.endDate,
          duration: this.props.duration,
-         id: uuid(),
+         endDate: this.props.endDate,
+         startDate: this.props.startDate,
+         status: '',
+         strategies: this.props.strategies,
+         user: [id],
        };
-       dispatch(NewFastActions.saveFast(fast));
+       axios.post('/api/fasts', fast)
+       .then((user) => {
+         console.log('user: ', user);
+         this.props._reset();
+         dispatch(NewFastActions.updateUser(user.data));
+       });
      },
      _reset() {
        dispatch(NewFastActions.reset());
@@ -121,10 +136,11 @@ export default class NewFast extends Component {
       wrapper: {
         display: 'flex',
         flexWrap: 'wrap',
+        textAlign: 'center',
       },
     };
 
-    const { strategy, startDate, endDate, time, finalDuration, duration, ownStrategy, strategies, completed, showDate, showTime, showDuration, linearProgress } = this.props;
+    let { user, strategy, startDate, endDate, time, finalDuration, duration, ownStrategy, strategies, completed, showDate, showTime, showDuration, linearProgress } = this.props;
     let { _hungerStrategies, _hungerStrategies2, _hungerStrategies3, _startDate, _startTime, _duration, _duration2, handleRequestDelete, _saveFast, _reset } = this.props;
 
     _startTime = _startTime.bind(this);
@@ -133,139 +149,163 @@ export default class NewFast extends Component {
     _hungerStrategies3 = _hungerStrategies3.bind(this);
     _saveFast = _saveFast.bind(this);
 
-    console.log('startDate: ', startDate);
-    console.log('endDate: ', endDate);
-    console.log('duration: ', duration);
+    console.log('user: ', user);
+
+    let userData = null;
+    if (!user._id && user.data) {
+      userData = user.data;
+    }
+
+    if (userData) {
+      user = userData;
+    }
+    console.log('user: ', user);
+
+    if (!user) {
+      browserHistory.push('/');
+    }
 
     return (
       <div>
         <br />
         <div className="col-sm-6">
-          <Card
+          <Paper
             style={{ width: 'auto', padding: '20px',
-              // backgroundColor: 'rgba(0, 176, 255, 0.02)',
               marginLeft: '10px',
-              marginRight: '20px',
+              marginRight: '10px',
+              marginBottom: '10px',
             }}
+            zDepth={1}
           >
-            <CardText style={{ color: '#ff4081', fontSize: '2em', textAlign: 'left' }} >DESIGN HERE</CardText>
+            <Card
+              style={{ width: 'auto', padding: '20px',
 
-            {showDate ?
-              <DatePicker
-                fullWidth
-                style={{ textAlign: 'center' }}
-                floatingLabelText="Start Date"
-                hintText="Choose Start Date"
-                mode="landscape"
-                autoOk
-                onChange={_startDate}
-              />
-            : null}
+              }}
+            >
+              <CardText style={{ color: '#ff4081', fontSize: '2em', textAlign: 'left' }} >DESIGN HERE</CardText>
 
-            {startDate && showTime ?
-              <TimePicker
-                fullWidth
-                style={{ textAlign: 'center' }}
-                floatingLabelText="Start Time"
-                format="24hr"
-                hintText="Choose Start Time"
-                onChange={_startTime}
-              /> : null}
-            {
-              time && showDuration ?
-                <TextField
+              {showDate ?
+                <DatePicker
                   fullWidth
-                  required
-                  floatingLabelText="Fast Duration in Hours"
-                  hintText="Fast Duration"
-                  type="Number"
-                  min="1"
-                  onChange={_duration}
+                  style={{ textAlign: 'center' }}
+                  floatingLabelText="Start Date"
+                  hintText="Choose Start Date"
+                  mode="landscape"
+                  onChange={_startDate}
                 />
-            : null}
-            {
-              time && showDuration ?
-                <br />
-            : null}
-            {
-              time && showDuration && finalDuration ?
-                <RaisedButton fullWidth label="Add Duration" secondary onClick={_duration2} /> : null}
-            {duration ?
-              <SelectField
-                fullWidth
-                floatingLabelText="Hunger Coping Strategies"
-                value={strategy}
-                onChange={_hungerStrategies}
-              >
-                {ownStrategy ? <MenuItem value={ownStrategy} primaryText={ownStrategy} /> : null}
-                <MenuItem value={'Drink Water'} primaryText="Drink Water" />
-                <MenuItem value={'Meditate'} primaryText="Meditate" />
-                <MenuItem value={'Exercise'} primaryText="Exercise" />
-                <MenuItem value={'Stay Busy'} primaryText="Stay Busy" />
-              </SelectField>
-            : null}
-            {duration ?
-              <TextField
-                fullWidth
-                floatingLabelText="Add Own Hunger Coping Method"
-                type="Text"
-                onChange={_hungerStrategies2}
-              />
-            : null}
+              : null}
 
-            {
-              ownStrategy ?
-                <RaisedButton fullWidth style={{ textAlign: 'center' }} label="Add Strategy" secondary onClick={() => _hungerStrategies3(ownStrategy)} /> : null
-            }
-            {linearProgress === 100 ? <CardText><br /></CardText> : null}
-            {linearProgress === 100 ? <CardText style={{ textAlign: 'center' }}><i className="fa fa-floppy-o fa-5x text-center" /></CardText> : null}
-            {linearProgress === 100 ? <Link to={'/myfasts'}><RaisedButton fullWidth style={{ textAlign: 'center' }} label="Save Fast" secondary onClick={() => _saveFast()} /></Link> : null}
-            <br />
-            {linearProgress > 1 ? <RaisedButton fullWidth style={{ textAlign: 'center' }} label="Discard" primary onClick={() => _reset()} /> : null}
+              {startDate && showTime ?
+                <TimePicker
+                  fullWidth
+                  style={{ textAlign: 'center' }}
+                  floatingLabelText="Start Time"
+                  hintText="Choose Start Time"
+                  onChange={_startTime}
+                /> : null}
+              {
+                time && showDuration ?
+                  <TextField
+                    fullWidth
+                    required
+                    floatingLabelText="Fast Duration in Hours"
+                    hintText="Fast Duration"
+                    type="Number"
+                    min="1"
+                    onChange={_duration}
+                  />
+              : null}
+              {
+                time && showDuration ?
+                  <br />
+              : null}
+              {
+                time && showDuration && finalDuration ?
+                  <RaisedButton fullWidth label="Add Duration" secondary onClick={_duration2} /> : null}
+              {duration ?
+                <SelectField
+                  fullWidth
+                  floatingLabelText="Hunger Coping Strategies"
+                  value={strategy}
+                  onChange={_hungerStrategies}
+                >
+                  {/* {ownStrategy ? <MenuItem value={ownStrategy} primaryText={ownStrategy} /> : null} */}
+                  <MenuItem value={'Drink Water'} primaryText="Drink Water" />
+                  <MenuItem value={'Meditate'} primaryText="Meditate" />
+                  <MenuItem value={'Exercise'} primaryText="Exercise" />
+                  <MenuItem value={'Stay Busy'} primaryText="Stay Busy" />
+                </SelectField>
+              : null}
+              {duration ?
+                <TextField
+                  style={{ paddingBottom: '0px', marginBottom: '1px' }}
+                  fullWidth
+                  floatingLabelText="Add Own Hunger Coping Method"
+                  type="Text"
+                  onChange={_hungerStrategies2}
+                />
+              : null}
 
-          </Card>
+              {ownStrategy ? <RaisedButton fullWidth style={{ textAlign: 'center' }} label="Add Strategy" onClick={() => _hungerStrategies3(ownStrategy)} /> : null }
+              {/* {linearProgress === 100 ? <CardText></CardText> : null} */}
+              {linearProgress === 100 ? <Link to={'/myfasts'}><RaisedButton fullWidth style={{ textAlign: 'center' }} label="Save Fast" secondary onClick={() => _saveFast()} /></Link> : null}
+              {linearProgress > 1 ? <RaisedButton fullWidth style={{ textAlign: 'center' }} label="Discard" primary onClick={() => _reset()} /> : null}
+
+            </Card>
+          </Paper>
+
         </div>
         <div className="col-sm-6">
-          <Card
+          <Paper
             style={{ width: 'auto', padding: '20px',
-              // backgroundColor: 'rgba(0, 176, 255, 0.02)',
-              marginLeft: '20px',
+              marginLeft: '10px',
               marginRight: '10px',
-              height: '500px',
             }}
+            zDepth={1}
           >
-            <div>
-              <CardText style={{ color: '#ff4081', fontSize: '2em', textAlign: 'left' }} >YOUR FAST</CardText>
-              <LinearProgress style={{ height: '80px' }} mode="determinate" value={linearProgress} />
-            </div>
-            <br />
-            <CardText style={{ textAlign: 'left', color: '#ff4081' }}>
-              {startDate ? 'Start : ' : ''}
-              {startDate ? `${moment(startDate).format('dddd, MMMM Do YYYY, h:mm a')}` : ''}
-              {startDate ? <hr /> : null}
-              {endDate ? 'End : ' : ''}
-              {endDate ? `${moment(endDate).format('dddd, MMMM Do YYYY, h:mm a')}` : ''}
-              {endDate ? <hr /> : null}
-              {duration ? 'Duration : ' : ''}
-              {duration ? `${duration} hours` : ''}
-              {duration ? <hr /> : null}
-              {strategies.length > 0 ? 'Hunger Strategies' : ''}
-              <br />
-              <br />
-              <div style={styles.wrapper}>
-                {strategies.map(strategy =>
-                  (
-                    <Chip
-                      key={strategy}
-                      style={{ marginRight: '4px' }}
-                      onRequestDelete={() => handleRequestDelete(strategy, strategies)}
-                    >
-                      {strategy}
-                    </Chip>
-                ))}
+            <Card
+              style={{ width: 'auto', padding: '20px',
+
+              }}
+            >
+              <CardHeader
+                title={user.displayName}
+                subtitle={user.email}
+                avatar={user.photoURL}
+              />
+              <div>
+                <CardText style={{ color: '#ff4081', fontSize: '2em', textAlign: 'left' }} >YOUR FAST</CardText>
+                <LinearProgress style={{ height: '80px' }} mode="determinate" value={linearProgress} />
               </div>
-            </CardText>
-          </Card>
+              <br />
+              <CardText style={{ textAlign: 'left', color: '#ff4081' }}>
+                {startDate ? 'Start : ' : ''}
+                {startDate ? `${moment(startDate).format('dddd, MMMM Do YYYY, h:mm a')}` : ''}
+                {startDate ? <hr /> : null}
+                {endDate ? 'End : ' : ''}
+                {endDate ? `${moment(endDate).format('dddd, MMMM Do YYYY, h:mm a')}` : ''}
+                {endDate ? <hr /> : null}
+                {duration ? 'Duration : ' : ''}
+                {duration ? `${duration} hours` : ''}
+                {duration ? <hr /> : null}
+                {strategies.length > 0 ? 'Hunger Strategies' : ''}
+                <br />
+                <br />
+                <div style={styles.wrapper}>
+                  {strategies.map(strategy =>
+                    (
+                      <Chip
+                        key={strategy}
+                        style={{ marginRight: '4px' }}
+                        onRequestDelete={() => handleRequestDelete(strategy, strategies)}
+                      >
+                        {strategy}
+                      </Chip>
+                  ))}
+                </div>
+              </CardText>
+            </Card>
+          </Paper>
         </div>
 
       </div>
