@@ -8,9 +8,11 @@ export default class Layout extends Component {
     return (
       <div>
         <Navbar />
-        <div>
+        <div className="col-sm-1" />
+        <div className="col-sm-10" style={{ padding: '5px' }}>
           {this.props.children}
         </div>
+        <div className="col-sm-1" />
       </div>
     );
   }

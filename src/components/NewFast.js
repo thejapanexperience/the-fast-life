@@ -165,7 +165,7 @@ export default class NewFast extends Component {
     return (
       <div>
         <br />
-        <div className="col-sm-6">
+        <div className="col-sm-12">
           <Paper
             style={{ width: 'auto', padding: '20px',
               marginLeft: '10px',
@@ -249,7 +249,7 @@ export default class NewFast extends Component {
           </Paper>
 
         </div>
-        <div className="col-sm-6">
+        <div className="col-sm-12">
           <Paper
             style={{ width: 'auto', padding: '20px',
               marginLeft: '10px',
@@ -299,6 +299,7 @@ export default class NewFast extends Component {
             </Card>
           </Paper>
         </div>
+        <div className="col-sm-1" />
 
       </div>
 

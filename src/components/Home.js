@@ -39,6 +39,10 @@ export default class Home extends Component {
   render() {
     let { loggedIn, user } = this.props;
 
+    if (loggedIn) {
+      console.log('user.photoURL: ', user.photoURL);
+    }
+
     let userData = null;
     if (!user._id && user.data) {
       userData = user.data;
@@ -56,14 +60,15 @@ export default class Home extends Component {
       <div>
         <Row>
           <Card style={{ width: '100%', padding: '5px' }}>
-            { loggedIn ? <CardHeader
-              title={user.displayName}
-              subtitle={user.email}
-              avatar={user.photoURL}
-            /> : <CardHeader
-              title="Welcome to the Fast Life..."
-              subtitle="Click Below To Sign In"
-            />}
+            { loggedIn ?
+              <CardHeader
+                title={user.displayName}
+                subtitle={user.email}
+                avatar={user.photoURL}
+              /> : <CardHeader
+                title="Welcome to the Fast Life..."
+                subtitle="Click Below To Sign In"
+              />}
             <CardMedia
               overlay={<CardTitle title="The Fast Life" subtitle="Plan your fasts for greater success" />}
             >
