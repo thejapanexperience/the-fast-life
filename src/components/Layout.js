@@ -6,13 +6,16 @@ import Navbar from './Navbar';
 export default class Layout extends Component {
   render() {
     return (
-      <div>
-        <Navbar />
-        <div className="col-sm-1" />
-        <div className="col-sm-10" style={{ padding: '5px' }}>
-          {this.props.children}
+      <div className="bodyContainer">
+        <div className="mainContainer">
+          <Navbar />
+          <div className="col-sm-12" />
+          {/* <div className="col-sm-1" id="WHERE?" /> */}
+          <div className="col-sm-12" style={{ padding: '5px' }}>
+            {this.props.children}
+          </div>
+          {/* <div className="col-sm-1" /> */}
         </div>
-        <div className="col-sm-1" />
       </div>
     );
   }

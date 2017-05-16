@@ -1,5 +1,5 @@
 {
-  "name": "redux-express",
+  "name": "theFastLife",
   "version": "1.0.0",
   "description": "",
   "main": "server/app.js",
@@ -10,8 +10,8 @@
     "node": "6"
   },
   "keywords": [],
-  "author": "Cade Nichols <cade@codinghouse.co>",
-  "license": "ISC",
+  "author": "Richard Mands",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.15.2",
     "babel-core": "^6.17.0",

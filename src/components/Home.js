@@ -57,7 +57,7 @@ export default class Home extends Component {
     }
 
     return (
-      <div>
+      <div className="homeContainer">
         <Row>
           <Card style={{ width: '100%', padding: '5px' }}>
             { loggedIn ?
