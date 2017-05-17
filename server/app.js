@@ -1,5 +1,5 @@
 const PORT = process.env.PORT || 8000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/thefastlife009';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://thefastlifeuser:password@ds143081.mlab.com:43081/thefastlife';
 
 const bodyParser = require('body-parser');
 const express = require('express');
