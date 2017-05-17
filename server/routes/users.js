@@ -9,8 +9,8 @@ router.post('/usercheck', (req, res) => {
   .then((user) => {
     const response = { user, result: req.body.result };
     res.send(response);
-  });
-  // .catch(err => res.status(400).send(err));
+  })
+  .catch(err => res.status(400).send(err));
 });
 
 router.post('/getuserfromdb', (req, res) => {
@@ -18,8 +18,8 @@ router.post('/getuserfromdb', (req, res) => {
   .populate('fasts')
   .then((user) => {
     res.send(user);
-  });
-  // .catch(err => res.status(400).send(err));
+  })
+  .catch(err => res.status(400).send(err));
 });
 
 router.route('/')
