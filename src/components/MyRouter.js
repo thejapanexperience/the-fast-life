@@ -5,6 +5,7 @@ import { firebaseAuth } from '../firebase';
 
 import Layout from './Layout';
 import Home from './Home';
+import Gallery from './Gallery';
 import MyFasts from './MyFasts';
 import NewFast from './NewFast';
 import Detail from './Detail';
@@ -23,6 +24,7 @@ export default class MyRouter extends Component {
       <Router history={browserHistory}>
         <Route path="/" component={Layout}>
           <IndexRoute component={Home} />
+          <Route path="/gallery" component={Gallery} />
           <Route path="/myfasts" component={MyFasts} onEnter={authCheck} />
           <Route path="/newfast" component={NewFast} onEnter={authCheck} />
           <Route path="/fastdetail" component={Detail} onEnter={authCheck} />
