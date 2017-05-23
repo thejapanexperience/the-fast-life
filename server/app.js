@@ -1,4 +1,4 @@
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8007;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://thefastlifeuser:password@ds143081.mlab.com:43081/thefastlife';
 
 const bodyParser = require('body-parser');
@@ -11,6 +11,14 @@ const mongoose = require('mongoose');
 // INITIALIZE SERVER
 const app = express();
 const server = require('http').createServer(app);
+
+app.use(function (req, res, next){
+  if (req.headers['x-forwarded-proto'] === 'https') {
+    res.redirect('http://' + req.hostname + req.url);
+  } else {
+    next();
+  }
+});
 
 // MONGOOSE CONFIG
 mongoose.Promise = Promise;

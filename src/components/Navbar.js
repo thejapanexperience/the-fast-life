@@ -54,11 +54,12 @@ export default class Navbar extends Component {
 
         {authenticated ? <Link to={'/'}><FlatButton className="navButtons" label="Fast Life" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/'}><FlatButton className="navButtons" label="The Fast Life" secondary style={{ width: '140px', padding: '2px' }} /></Link>}
 
-        {authenticated ? <Link to={'/myfasts'}><FlatButton className="navButtons" label="My Fasts" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/gallery'}><FlatButton className="navButtons" label="How To" secondary style={{ width: '140px', padding: '2px' }} /></Link>}
+          {authenticated ? <Link to={'/myfasts'}><FlatButton className="navButtons" label="My Fasts" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/gallery'}><FlatButton className="navButtons" label="How To" secondary style={{ width: '140px', padding: '2px' }} /></Link>}
 
-        {authenticated ? <Link to={'/newfast'}><FlatButton className="navButtons" label="New Fast" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/'}><FlatButton className="navButtons" disabled label=" " secondary style={{ width: '25%', padding: '2px' }} /></Link> }
+            {authenticated ? <Link to={'/newfast'}><FlatButton className="navButtons" label="New Fast" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/'}><FlatButton className="navButtons" disabled label=" " secondary style={{ width: '25%', padding: '2px' }} /></Link> }
 
-        {authenticated ? <Link to={'/'}><FlatButton className="navButtons" onClick={this._signOut} label="Sign Out" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/'}><FlatButton className="navButtons" label="Login" secondary style={{ width: '25%', padding: '2px' }} /></Link>}
+              {authenticated ? <Link to={'/'}><FlatButton className="navButtons" onClick={this._signOut} label="Sign Out" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/'}><FlatButton className="navButtons" label="" disabled secondary style={{ width: '25%', padding: '2px' }} /></Link>}
+                {/* {authenticated ? <Link to={'/'}><FlatButton className="navButtons" onClick={this._signOut} label="Sign Out" primary style={{ width: '25%', padding: '2px' }} /></Link> : <Link to={'/'}><FlatButton className="navButtons" label="Login" secondary style={{ width: '25%', padding: '2px' }} /></Link>} */}
 
       </div>
 
